@@ -1,0 +1,13 @@
+.Interactive {
+    display: grid;
+    grid-template-columns: 220px auto;
+}
+.Interactive .Settings {
+    grid-column: 1;
+}
+.Interactive .Vis {
+
+}
+.Interactive form {
+    text-align: left;
+}
