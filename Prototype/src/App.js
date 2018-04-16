@@ -126,10 +126,21 @@ class App extends Component {
           </form>
       </div>
   );
+
+  let basic_result = <div/>;
+  if(this.state.row) {
+    basic_result = (
+      <div>
+          <p>If you email client does not open, please copy the below data and send it to "smclaypool@wpi.edu".</p>
+          <p>{this.state.row}</p>
+      </div>
+      ); 
+  }
   return (
       <div className="Survey">
           <h1>Please enter a bit about yourself</h1>
           {form}
+          {basic_result}
       </div>
   );
   }
@@ -148,6 +159,10 @@ class App extends Component {
     let edValue = education.value; 
     this.row = {...this.row, age: ageVal, gender: genderVal, experience: expVal, education: edValue};
     window.location.href = "mailto:smclaypool@wpi.edu?subject=Experiment%20Results&body=" + JSON.stringify(this.row);
+    this.setState({
+      ...this.state, 
+        row: JSON.stringify(this.row)
+    });
     console.log(this.row)
 }
 
