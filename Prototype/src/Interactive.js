@@ -35,12 +35,13 @@ export class Interactive extends Component {
       <div className="Interactive">
         <div className="Settings">
           <h3>What do you know?</h3>
+          <p>Click the radio buttons to interact!</p>
           <h4>The Condition:</h4>
           <div className="Query"/>
             <form onChange={this.handle_condition_change}>
               <input type="radio" name="condition" value="1"/>Has Condition<br/>
               <input type="radio" name="condition" value="-1"/>No Condition<br/>
-              <input type="radio" name="condition" value="0" defaultChecked="checked"/>Unknown Condition<br/>
+              <input type="radio" name="condition" value="0" defaultChecked="checked"/>Either Condition<br/>
             </form>
           <div className="Query"/>
           <h4>The Test:</h4>
@@ -48,7 +49,7 @@ export class Interactive extends Component {
             <form onChange={this.handle_test_change}>
               <input type="radio" name="test" value="1"/>Positive Test<br/>
               <input type="radio" name="test" value="-1"/>Negative Test<br/>
-              <input type="radio" name="test" value="0" defaultChecked="checked"/>Unknown Test<br/>
+              <input type="radio" name="test" value="0" defaultChecked="checked"/>Either Test<br/>
             </form>
           <div className="Query"/>
         </div>

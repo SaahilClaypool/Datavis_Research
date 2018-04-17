@@ -119,7 +119,7 @@ export class FrequencyChart extends Component {
           }
           return `translate(0, ${labelHeight * (ind + .5)})`;
         });
-    }, 500);
+    }, 10);
     // setTimeout(() => {
     //   this.renderD3(); 
     // }, 1000);
