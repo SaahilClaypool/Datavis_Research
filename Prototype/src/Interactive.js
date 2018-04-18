@@ -114,7 +114,7 @@ export class Interactive extends Component {
                 <input type="radio" name="condition" value="-1"/>No Condition
               </label><br/>
               <label onMouseEnter={this.handle_mouse_enter_condition} onMouseLeave={this.handle_mouse_leave_condition}>
-                <input type="radio" name="condition" value="0"/>Either Condition
+                <input type="radio" name="condition" value="0" defaultChecked="checked"/>Either Condition
               </label><br/>
             </form>
           <div className="Query"/>
