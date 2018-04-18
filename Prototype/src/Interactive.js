@@ -20,18 +20,21 @@ export class Interactive extends Component {
   }
 
   handle_mouse_enter_condition = (event) => {
-    let val = parseInt(event.target.firstChild.value); 
-    this.setState((prevState) => {
-      return {
-        test: this.state.test, condition: val,
-        p_condition: this.state.condition,
-        p_test: this.state.test
-      };
-    });
+    try {
+      let val = parseInt(event.target.firstChild.value); 
+      this.setState((prevState) => {
+        return {
+          test: this.state.test, condition: val,
+          p_condition: this.state.condition,
+          p_test: this.state.test
+        };
+      });
+    } catch (e) {
+      console.log(e); 
+    }
   }
 
   handle_mouse_leave_condition = (event) => {
-    let val = parseInt(event.target.firstChild.value); 
     this.setState((prevState) => {
       return {
         test: this.state.test, condition: this.state.s_condition,
@@ -42,18 +45,21 @@ export class Interactive extends Component {
   }
 
   handle_mouse_enter_test = (event) => {
-    let val = parseInt(event.target.firstChild.value); 
-    this.setState((prevState) => {
-      return {
-        test: val, condition: this.state.condition,
-        p_condition: this.state.condition,
-        p_test: this.state.test
-      };
-    });
+    try {
+      let val = parseInt(event.target.firstChild.value); 
+      this.setState((prevState) => {
+        return {
+          test: val, condition: this.state.condition,
+          p_condition: this.state.condition,
+          p_test: this.state.test
+        };
+      });
+    } catch (e) {
+      console.log(e); 
+    }
   }
 
   handle_mouse_leave_test = (event) => {
-    let val = parseInt(event.target.firstChild.value); 
     this.setState((prevState) => {
       return {
         test: this.state.s_test, condition: this.state.condition,
