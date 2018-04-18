@@ -5,8 +5,8 @@
 .Interactive .Settings {
     grid-column: 1;
 }
-.Interactive .Vis {
-
+.Interactive p {
+    grid-column: 1/3;
 }
 .Interactive form {
     text-align: left;

@@ -111,11 +111,11 @@ export class FrequencyChart extends Component {
     setTimeout(() => {
       d3.selectAll('.attribute')
         .transition()
-        .duration(500)
+        .duration(400)
         .attr('transform', (d, i) => {
           let ind = new_labels.indexOf(d.label); 
           if(ind === -1) {
-            return `translate(0, ${800})`;
+            return `translate(0, ${700})`;
           }
           return `translate(0, ${labelHeight * (ind + .5)})`;
         });
