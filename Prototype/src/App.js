@@ -11,6 +11,7 @@ class App extends Component {
 
   screen = 0;
   row = {}; 
+  postId = (+new Date()).toString(36)
 
   constructor(props) {
     super(props); 
@@ -130,8 +131,9 @@ class App extends Component {
   if(this.state.row) {
     basic_result = (
       <div>
-          <p>Your data: </p>
-          <p>{this.state.row}</p>
+          <p>Thank you!</p>
+          <p>Use the survey code to verify the completion of your task</p>
+          <p>code: {this.postId}</p>
       </div>
       ); 
   }
@@ -156,7 +158,8 @@ class App extends Component {
     let expVal = experience.value; 
     let education = document.getElementById("education");
     let edValue = education.value; 
-    this.row = {...this.row, age: ageVal, gender: genderVal, experience: expVal, education: edValue};
+    console.log("Post id: " + this.postId)
+    this.row = {...this.row, age: ageVal, gender: genderVal, experience: expVal, education: edValue, postId: this.postId};
     // window.location.href = "mailto:smclaypool@wpi.edu?subject=Experiment%20Results&body=" + JSON.stringify(this.row);
     this.setState({
       ...this.state, 
