@@ -83,50 +83,59 @@ colnames(splitAccuracyDF) <- x
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("interactive",
                                                     length(which(resultsDF$visType=='interactive' &
                                                                    resultsDF$guessBCorrect==TRUE & 
-                                                                   resultsDF$experience=='High')) / length(which(resultsDF$visType=='interactive')),
+                                                                   resultsDF$experience=='High')) / length(which(resultsDF$visType=='interactive' &
+                                                                                                                   resultsDF$experience=='High')),
                                                     "High")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("interactive",
                                                     length(which(resultsDF$visType=='interactive' &
                                                                    resultsDF$guessBCorrect==TRUE & 
-                                                                   resultsDF$experience=='Medium')) / length(which(resultsDF$visType=='interactive')),
+                                                                   resultsDF$experience=='Medium')) / length(which(resultsDF$visType=='interactive' &
+                                                                                                                     resultsDF$experience=='Medium')),
                                                     "Medium")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("interactive",
                                                     length(which(resultsDF$visType=='interactive' &
                                                                    resultsDF$guessBCorrect==TRUE & 
-                                                                   resultsDF$experience=='Low')) / length(which(resultsDF$visType=='interactive')),
+                                                                   resultsDF$experience=='Low')) / length(which(resultsDF$visType=='interactive' &
+                                                                                                                  resultsDF$experience=='Low')),
                                                     "Low")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("static_interactive",
                                                     length(which(resultsDF$visType=='static_interactive' &
                                                                    resultsDF$guessBCorrect==TRUE & 
-                                                                   resultsDF$experience=='High')) / length(which(resultsDF$visType=='static_interactive')),
+                                                                   resultsDF$experience=='High')) / length(which(resultsDF$visType=='static_interactive' &
+                                                                                                                   resultsDF$experience=='High')),
                                                     "High")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("static_interactive",
                                                     length(which(resultsDF$visType=='static_interactive' &
                                                                    resultsDF$guessBCorrect==TRUE & 
-                                                                   resultsDF$experience=='Medium')) / length(which(resultsDF$visType=='static_interactive')),
+                                                                   resultsDF$experience=='Medium')) / length(which(resultsDF$visType=='static_interactive' &
+                                                                                                                     resultsDF$experience=='Medium')),
                                                     "Medium")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("static_interactive",
                                                     length(which(resultsDF$visType=='static_interactive' &
                                                                    resultsDF$guessBCorrect==TRUE & 
-                                                                   resultsDF$experience=='Low')) / length(which(resultsDF$visType=='static_interactive')),
+                                                                   resultsDF$experience=='Low')) / length(which(resultsDF$visType=='static_interactive' &
+                                                                                                                  resultsDF$experience=='Low')),
                                                     "Low")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("text",
                                                     length(which(resultsDF$visType=='text' &
                                                                    resultsDF$guessBCorrect==TRUE & 
-                                                                   resultsDF$experience=='High')) / length(which(resultsDF$visType=='text')),
+                                                                   resultsDF$experience=='High')) / length(which(resultsDF$visType=='text' &
+                                                                                                                   resultsDF$experience=='High')),
                                                     "High")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("text",
                                                     length(which(resultsDF$visType=='text' &
                                                                    resultsDF$guessBCorrect==TRUE & 
-                                                                   resultsDF$experience=='Medium')) / length(which(resultsDF$visType=='text')),
+                                                                   resultsDF$experience=='Medium')) / length(which(resultsDF$visType=='text' &
+                                                                                                                     resultsDF$experience=='Medium')),
                                                     "Medium")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("text",
                                                     length(which(resultsDF$visType=='text' &
                                                                    resultsDF$guessBCorrect==TRUE & 
-                                                                   resultsDF$experience=='Low')) / length(which(resultsDF$visType=='text')),
+                                                                   resultsDF$experience=='Low')) / length(which(resultsDF$visType=='text' &
+                                                                                                                  resultsDF$experience=='Low')),
                                                     "Low")
 ggplot(data = splitAccuracyDF, 
-       aes(x = visType, y = accuracy, fill = experience)) + #factor(experience, c("High","Medium","Low")))) +
+       aes(x = visType, y = accuracy, fill = experience)) + 
   geom_bar(stat = 'identity', width = 0.4, position = position_dodge(), color = 'darkblue') +
   scale_y_continuous(labels = scales::percent_format()) +
   labs(title = "Accuracy of Guess B (by Statistics Experience)")
