@@ -16,15 +16,46 @@ colnames(raw2)[colSums(is.na(raw2)) > 0]
 colnames(raw3)[colSums(is.na(raw3)) > 0]
 # duplicates were removed in raw3
 resultsDF <- raw3
-# determine if participants were CORRECT or NOT in their guesses
+# calculating Log-base-2 error values
 attach(resultsDF)
+resultsDF$logErrorGuessA = log(abs(guessA - 
+                                      (ceiling(questionN * data$has_condition * data$positive_condition) +
+                                      ceiling((questionN - questionN * data$has_condition) * data$positive_no_condition))) + 1/8,2)
+resultsDF$logErrorGuessB = log(abs(guessB - 
+                                      (ceiling(questionN * data$has_condition * data$positive_condition))) + 1/8,2)
+# setting -3 value to 0 (these values mean the guess was CORRECT)
+resultsDF$logErrorGuessA[resultsDF$logErrorGuessA == -3] = 0
+resultsDF$logErrorGuessB[resultsDF$logErrorGuessB == -3] = 0
+# chisquare test for log error values
+chisq.test(resultsDF$visType, resultsDF$logErrorGuessA, correct = FALSE)
+chisq.test(resultsDF$visType, resultsDF$logErrorGuessB, correct = FALSE)
+# logError plots
+ggplot(resultsDF, aes(x = visType, y = logErrorGuessA)) +
+  geom_jitter(width = 0.1, alpha = 0.3) +
+  stat_summary(fun.data = "mean_cl_boot", color = "red", size = 1.2, shape = 18, geom = "pointrange") +
+  labs(title = "Guess A log-2 error plot")
+ggplot(resultsDF, aes(x = visType, y = logErrorGuessB)) +
+  geom_jitter(width = 0.1, alpha = 0.3) +
+  stat_summary(fun.data = "mean_cl_boot", color = "red", size = 1.2, shape = 18, geom = "pointrange") +
+  labs(title = "Guess B log-2 error plot")
+# determine if participants were CORRECT or NOT in their guesses
 resultsDF$guessACorrect = as.factor(
   guessA == ceiling(questionN * data$has_condition * data$positive_condition) +
-            ceiling((questionN - questionN * data$has_condition) * data$positive_no_condition)  
+            ceiling((questionN - questionN * data$has_condition) * data$positive_no_condition)
 )
 resultsDF$guessBCorrect = as.factor(
   guessB == ceiling(questionN * data$has_condition * data$positive_condition)
 )
+# indepedent two-sample t-test
+TwoGroup.ST <- resultsDF[resultsDF$visType != "interactive",]
+TwoGroup.IT <- resultsDF[resultsDF$visType != "static_interactive",]
+TwoGroup.IS <- resultsDF[resultsDF$visType != "text",]
+t.test(logErrorGuessA ~ visType, data = TwoGroup.ST)
+t.test(logErrorGuessB ~ visType, data = TwoGroup.ST)
+t.test(logErrorGuessA ~ visType, data = TwoGroup.IT)
+t.test(logErrorGuessB ~ visType, data = TwoGroup.IT)
+t.test(logErrorGuessA ~ visType, data = TwoGroup.IS)
+t.test(logErrorGuessB ~ visType, data = TwoGroup.IS)
 # the separated correct guesses dataframes
 bothCorrectDF <- resultsDF[resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE,]
 correctOrNotDF <- rbind(bothCorrectDF, resultsDF[resultsDF$guessACorrect==FALSE & resultsDF$guessBCorrect==FALSE,])
@@ -174,10 +205,12 @@ stat2DF <- correctOrNotDF[c("visType","guessACorrect","guessBCorrect")]
 chisq.test(stat2DF$visType, stat2DF$guessBCorrect, correct = FALSE)
 chisq.test(stat2DF$guessACorrect, stat2DF$guessBCorrect, correct = FALSE)
 # pairwise chi square
-pairAgain1DF <- stat2DF[stat2DF$visType != "interactive",]
-pairAgain2DF <- stat2DF[stat2DF$visType != "static_interactive",]
-chisq.test(pairAgain1DF$visType, pairAgain1DF$guessACorrect, correct = FALSE)
-chisq.test(pairAgain2DF$visType, pairAgain2DF$guessACorrect, correct = FALSE)
+staticTextPairDF <- stat2DF[stat2DF$visType != "interactive",]
+interactTextPairDF <- stat2DF[stat2DF$visType != "static_interactive",]
+staticInteractivePairDF <- stat2DF[stat2DF$visType != "text",]
+chisq.test(staticTextPairDF$visType, staticTextPairDF$guessACorrect, correct = FALSE)
+chisq.test(interactTextPairDF$visType, interactTextPairDF$guessACorrect, correct = FALSE)
+chisq.test(staticInteractivePairDF$visType, staticInteractivePairDF$guessACorrect, correct = FALSE)
 # getting accuracy statistics
 accuracy2DF <- data.frame(matrix(nrow = 0, ncol = 2))
 x <- c("visType", "accuracy")
