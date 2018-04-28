@@ -50,6 +50,7 @@ ggplot(resultsDF, aes(x = visType, y = logErrorGuessB)) +
   geom_jitter(width = 0.1, alpha = 0.3, size = 3) +
   stat_summary(fun.data = "mean_cl_boot", color = "red", size = 2, shape = 18, geom = "pointrange") +
   labs(title = "Guess B log-2 error plot")
+
 # determine if participants were CORRECT or NOT in their guesses
 resultsDF$guessACorrect = as.factor(
   guessA == ceiling(questionN * data.has_condition * data.positive_condition) +
@@ -58,6 +59,7 @@ resultsDF$guessACorrect = as.factor(
 resultsDF$guessBCorrect = as.factor(
   guessB == ceiling(questionN * data.has_condition * data.positive_condition)
 )
+
 # indepedent two-sample t-test
 TwoGroup.ST <- resultsDF[resultsDF$visType != "interactive",]
 TwoGroup.IT <- resultsDF[resultsDF$visType != "static_interactive",]
@@ -68,9 +70,21 @@ t.test(logErrorGuessA ~ visType, data = TwoGroup.IT)
 t.test(logErrorGuessB ~ visType, data = TwoGroup.IT)
 t.test(logErrorGuessA ~ visType, data = TwoGroup.IS)
 t.test(logErrorGuessB ~ visType, data = TwoGroup.IS)
+
 # the separated correct guesses dataframes
 bothCorrectDF <- resultsDF[resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE,]
-correctOrNotDF <- rbind(bothCorrectDF, resultsDF[resultsDF$guessACorrect==FALSE & resultsDF$guessBCorrect==FALSE,])
+bothCorrectDF$allCorrect <- TRUE
+notCorrectDF <- resultsDF[!(resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE),]
+notCorrectDF$allCorrect <- FALSE
+correctOrNotDF <- rbind(bothCorrectDF, notCorrectDF)
+chisq.test(correctOrNotDF$visType, correctOrNotDF$allCorrect, correct = FALSE)
+# pairwise
+TwoGroup.ST2 <- correctOrNotDF[resultsDF$visType != "interactive",]
+TwoGroup.IT2 <- correctOrNotDF[resultsDF$visType != "static_interactive",]
+TwoGroup.IS2 <- correctOrNotDF[resultsDF$visType != "text",]
+chisq.test(TwoGroup.ST2$visType, TwoGroup.ST2$allCorrect, correct = FALSE)
+chisq.test(TwoGroup.IT2$visType, TwoGroup.IT2$allCorrect, correct = FALSE)
+chisq.test(TwoGroup.IS2$visType, TwoGroup.IS2$allCorrect, correct = FALSE)
 guessACorrectDF <- resultsDF[resultsDF$guessACorrect==TRUE,]
 guessBCorrectDF <- resultsDF[resultsDF$guessBCorrect==TRUE,]
 
@@ -115,15 +129,15 @@ accuracyDF <- data.frame(matrix(nrow = 0, ncol = 2))
 x <- c("visType", "accuracy")
 colnames(accuracyDF) <- x
 accuracyDF[nrow(accuracyDF) + 1,] <- list("interactive",
-                                          length(which(resultsDF$visType=='interactive' & resultsDF$guessBCorrect==TRUE)) / length(which(resultsDF$visType=='interactive')))
+                                          length(which(resultsDF$visType=='interactive' & resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE)) / length(which(resultsDF$visType=='interactive')))
 accuracyDF[nrow(accuracyDF) + 1,] <- list("static_interactive",
-                                          length(which(resultsDF$visType=='static_interactive' & resultsDF$guessBCorrect==TRUE)) / length(which(resultsDF$visType=='static_interactive')))
+                                          length(which(resultsDF$visType=='static_interactive' & resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE)) / length(which(resultsDF$visType=='static_interactive')))
 accuracyDF[nrow(accuracyDF) + 1,] <- list("text",
-                                          length(which(resultsDF$visType=='text' & resultsDF$guessBCorrect==TRUE)) / length(which(resultsDF$visType=='text')))
+                                          length(which(resultsDF$visType=='text' & resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE)) / length(which(resultsDF$visType=='text')))
 ggplot(data = accuracyDF, aes(x = visType, y = accuracy)) +
   geom_bar(stat = 'identity', width = 0.3, fill = 'lightskyblue', color = 'darkblue') +
   scale_y_continuous(labels = scales::percent_format(), limits = c(0,1)) +
-  labs(title = "Accuracy of Guess B statistics plot") +
+  labs(title = "Accuracy statistics plot") +
   theme_bw()
 # splitting accuracy by Statistics Experience Demographics
 splitAccuracyDF <- data.frame(matrix(nrow = 0, ncol = 3))
@@ -131,55 +145,55 @@ x <- c("visType", "accuracy", "experience")
 colnames(splitAccuracyDF) <- x
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("interactive",
                                                     length(which(resultsDF$visType=='interactive' &
-                                                                   resultsDF$guessBCorrect==TRUE & 
+                                                                   resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE & 
                                                                    resultsDF$experience=='High')) / length(which(resultsDF$visType=='interactive' &
                                                                                                                    resultsDF$experience=='High')),
                                                     "High")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("interactive",
                                                     length(which(resultsDF$visType=='interactive' &
-                                                                   resultsDF$guessBCorrect==TRUE & 
+                                                                   resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE & 
                                                                    resultsDF$experience=='Medium')) / length(which(resultsDF$visType=='interactive' &
                                                                                                                      resultsDF$experience=='Medium')),
                                                     "Medium")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("interactive",
                                                     length(which(resultsDF$visType=='interactive' &
-                                                                   resultsDF$guessBCorrect==TRUE & 
+                                                                   resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE & 
                                                                    resultsDF$experience=='Low')) / length(which(resultsDF$visType=='interactive' &
                                                                                                                   resultsDF$experience=='Low')),
                                                     "Low")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("static_interactive",
                                                     length(which(resultsDF$visType=='static_interactive' &
-                                                                   resultsDF$guessBCorrect==TRUE & 
+                                                                   resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE & 
                                                                    resultsDF$experience=='High')) / length(which(resultsDF$visType=='static_interactive' &
                                                                                                                    resultsDF$experience=='High')),
                                                     "High")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("static_interactive",
                                                     length(which(resultsDF$visType=='static_interactive' &
-                                                                   resultsDF$guessBCorrect==TRUE & 
+                                                                   resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE & 
                                                                    resultsDF$experience=='Medium')) / length(which(resultsDF$visType=='static_interactive' &
                                                                                                                      resultsDF$experience=='Medium')),
                                                     "Medium")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("static_interactive",
                                                     length(which(resultsDF$visType=='static_interactive' &
-                                                                   resultsDF$guessBCorrect==TRUE & 
+                                                                   resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE & 
                                                                    resultsDF$experience=='Low')) / length(which(resultsDF$visType=='static_interactive' &
                                                                                                                   resultsDF$experience=='Low')),
                                                     "Low")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("text",
                                                     length(which(resultsDF$visType=='text' &
-                                                                   resultsDF$guessBCorrect==TRUE & 
+                                                                   resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE & 
                                                                    resultsDF$experience=='High')) / length(which(resultsDF$visType=='text' &
                                                                                                                    resultsDF$experience=='High')),
                                                     "High")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("text",
                                                     length(which(resultsDF$visType=='text' &
-                                                                   resultsDF$guessBCorrect==TRUE & 
+                                                                   resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE & 
                                                                    resultsDF$experience=='Medium')) / length(which(resultsDF$visType=='text' &
                                                                                                                      resultsDF$experience=='Medium')),
                                                     "Medium")
 splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("text",
                                                     length(which(resultsDF$visType=='text' &
-                                                                   resultsDF$guessBCorrect==TRUE & 
+                                                                   resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE & 
                                                                    resultsDF$experience=='Low')) / length(which(resultsDF$visType=='text' &
                                                                                                                   resultsDF$experience=='Low')),
                                                     "Low")
@@ -187,11 +201,131 @@ ggplot(data = splitAccuracyDF,
        aes(x = visType, y = accuracy, fill = experience)) + 
   geom_bar(stat = 'identity', width = 0.4, position = position_dodge(), color = 'darkblue') +
   scale_y_continuous(labels = scales::percent_format()) +
-  labs(title = "Accuracy of Guess B (by Statistics Experience)")
+  labs(title = "Accuracy (by Statistics Experience)")
+# splitting accuracy by education
+splitEduAccuracyDF <- data.frame(matrix(nrow = 0, ncol = 3))
+x <- c("visType", "accuracy", "education")
+colnames(splitEduAccuracyDF) <- x
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("interactive",
+                                                      length(which(resultsDF$visType=='interactive' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='High School')) / length(which(resultsDF$visType=='interactive' &
+                                                                                                                                resultsDF$education=='High School')),
+                                                      "High School")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("interactive",
+                                                      length(which(resultsDF$visType=='interactive' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='2 Year College')) / length(which(resultsDF$visType=='interactive' &
+                                                                                                                                   resultsDF$education=='2 Year College')),
+                                                      "2 Year College")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("interactive",
+                                                      length(which(resultsDF$visType=='interactive' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='4 Year College')) / length(which(resultsDF$visType=='interactive' &
+                                                                                                                                   resultsDF$education=='4 Year College')),
+                                                      "4 Year College")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("interactive",
+                                                      length(which(resultsDF$visType=='interactive' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='Masters')) / length(which(resultsDF$visType=='interactive' &
+                                                                                                                            resultsDF$education=='Masters')),
+                                                      "Masters")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("interactive",
+                                                      length(which(resultsDF$visType=='interactive' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='MD')) / length(which(resultsDF$visType=='interactive' &
+                                                                                                                       resultsDF$education=='MD')),
+                                                      "MD")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("interactive",
+                                                      length(which(resultsDF$visType=='interactive' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='PhD')) / length(which(resultsDF$visType=='interactive' &
+                                                                                                                        resultsDF$education=='PhD')),
+                                                      "PhD")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("static_interactive",
+                                                      length(which(resultsDF$visType=='static_interactive' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='High School')) / length(which(resultsDF$visType=='static_interactive' &
+                                                                                                                                resultsDF$education=='High School')),
+                                                      "High School")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("static_interactive",
+                                                      length(which(resultsDF$visType=='static_interactive' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='2 Year College')) / length(which(resultsDF$visType=='static_interactive' &
+                                                                                                                                   resultsDF$education=='2 Year College')),
+                                                      "2 Year College")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("static_interactive",
+                                                      length(which(resultsDF$visType=='static_interactive' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='4 Year College')) / length(which(resultsDF$visType=='static_interactive' &
+                                                                                                                                   resultsDF$education=='4 Year College')),
+                                                      "4 Year College")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("static_interactive",
+                                                      length(which(resultsDF$visType=='static_interactive' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='Masters')) / length(which(resultsDF$visType=='static_interactive' &
+                                                                                                                            resultsDF$education=='Masters')),
+                                                      "Masters")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("static_interactive",
+                                                      length(which(resultsDF$visType=='static_interactive' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='MD')) / length(which(resultsDF$visType=='static_interactive' &
+                                                                                                                       resultsDF$education=='MD')),
+                                                      "MD")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("static_interactive",
+                                                      length(which(resultsDF$visType=='static_interactive' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='PhD')) / length(which(resultsDF$visType=='static_interactive' &
+                                                                                                                        resultsDF$education=='PhD')),
+                                                      "PhD")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("text",
+                                                      length(which(resultsDF$visType=='text' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='High School')) / length(which(resultsDF$visType=='text' &
+                                                                                                                                resultsDF$education=='High School')),
+                                                      "High School")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("text",
+                                                      length(which(resultsDF$visType=='text' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='2 Year College')) / length(which(resultsDF$visType=='text' &
+                                                                                                                                   resultsDF$education=='2 Year College')),
+                                                      "2 Year College")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("text",
+                                                      length(which(resultsDF$visType=='text' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='4 Year College')) / length(which(resultsDF$visType=='text' &
+                                                                                                                                   resultsDF$education=='4 Year College')),
+                                                      "4 Year College")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("text",
+                                                      length(which(resultsDF$visType=='text' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='Masters')) / length(which(resultsDF$visType=='text' &
+                                                                                                                            resultsDF$education=='Masters')),
+                                                      "Masters")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("text",
+                                                      length(which(resultsDF$visType=='text' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='MD')) / length(which(resultsDF$visType=='text' &
+                                                                                                                       resultsDF$education=='MD')),
+                                                      "MD")
+splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("text",
+                                                      length(which(resultsDF$visType=='text' &
+                                                                     resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE  & 
+                                                                     resultsDF$education=='PhD')) / length(which(resultsDF$visType=='text' &
+                                                                                                                        resultsDF$education=='PhD')),
+                                                      "PhD")
+
+ggplot(data = splitEduAccuracyDF, 
+       aes(x = visType, y = accuracy, fill = education)) + 
+  geom_bar(stat = 'identity', width = 0.4, position = position_dodge(), color = 'darkblue') +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(title = "Both guesses correct accuracy (by Education)")
+
 
 #######################################################################################
-# this is for JUST the subset of respondents who got both guesses correctly
-
+# the following is for the subset of respondents who got both guesses correctly
+# also misc work
+#######################################################################################
 # demographic data statistics
 demo2DF <- correctOrNotDF[c("age","gender","experience","education")]
 demo2DF$gender <- as.factor(demo2DF$gender)
