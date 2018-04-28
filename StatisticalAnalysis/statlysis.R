@@ -42,15 +42,20 @@ resultsDF$logErrorGuessB[resultsDF$logErrorGuessB == -3] = 0
 chisq.test(resultsDF$visType, resultsDF$logErrorGuessA, correct = FALSE)
 chisq.test(resultsDF$visType, resultsDF$logErrorGuessB, correct = FALSE)
 # logError plots
+png('logError-guessA.png', units="in", width=5, height=4, res=300)
 ggplot(resultsDF, aes(x = visType, y = logErrorGuessA)) +
   geom_jitter(width = 0.1, alpha = 0.3, size = 3) +
-  stat_summary(fun.data = "mean_cl_boot", color = "red", size = 2, shape = 18, geom = "pointrange") +
-  labs(title = "Guess A log-2 error plot")
+  stat_summary(fun.data = "mean_cl_boot", color = "red", size = 1, shape = 18, geom = "pointrange") +
+  labs(title = "Guess A log-2 error plot") +
+  theme_bw()
+dev.off()
+png('logError-guessB.png', units="in", width=5, height=4, res=300)
 ggplot(resultsDF, aes(x = visType, y = logErrorGuessB)) +
   geom_jitter(width = 0.1, alpha = 0.3, size = 3) +
-  stat_summary(fun.data = "mean_cl_boot", color = "red", size = 2, shape = 18, geom = "pointrange") +
-  labs(title = "Guess B log-2 error plot")
-
+  stat_summary(fun.data = "mean_cl_boot", color = "red", size = 1, shape = 18, geom = "pointrange") +
+  labs(title = "Guess B log-2 error plot") +
+  theme_bw()
+dev.off()
 # determine if participants were CORRECT or NOT in their guesses
 resultsDF$guessACorrect = as.factor(
   guessA == ceiling(questionN * data.has_condition * data.positive_condition) +
@@ -134,11 +139,14 @@ accuracyDF[nrow(accuracyDF) + 1,] <- list("static_interactive",
                                           length(which(resultsDF$visType=='static_interactive' & resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE)) / length(which(resultsDF$visType=='static_interactive')))
 accuracyDF[nrow(accuracyDF) + 1,] <- list("text",
                                           length(which(resultsDF$visType=='text' & resultsDF$guessACorrect==TRUE & resultsDF$guessBCorrect==TRUE)) / length(which(resultsDF$visType=='text')))
+png('Accuracy.png', units="in", width=5, height=4, res=300)
+#insert ggplot code
 ggplot(data = accuracyDF, aes(x = visType, y = accuracy)) +
   geom_bar(stat = 'identity', width = 0.3, fill = 'lightskyblue', color = 'darkblue') +
   scale_y_continuous(labels = scales::percent_format(), limits = c(0,1)) +
   labs(title = "Accuracy statistics plot") +
   theme_bw()
+dev.off()
 # splitting accuracy by Statistics Experience Demographics
 splitAccuracyDF <- data.frame(matrix(nrow = 0, ncol = 3))
 x <- c("visType", "accuracy", "experience")
@@ -197,11 +205,14 @@ splitAccuracyDF[nrow(splitAccuracyDF) + 1,] <- list("text",
                                                                    resultsDF$experience=='Low')) / length(which(resultsDF$visType=='text' &
                                                                                                                   resultsDF$experience=='Low')),
                                                     "Low")
+png('splitAccuracy-statExp.png', units="in", width=5, height=4, res=300)
 ggplot(data = splitAccuracyDF, 
        aes(x = visType, y = accuracy, fill = experience)) + 
   geom_bar(stat = 'identity', width = 0.4, position = position_dodge(), color = 'darkblue') +
   scale_y_continuous(labels = scales::percent_format()) +
-  labs(title = "Accuracy (by Statistics Experience)")
+  labs(title = "Accuracy (by Statistics Experience)") +
+  theme_bw()
+dev.off()
 # splitting accuracy by education
 splitEduAccuracyDF <- data.frame(matrix(nrow = 0, ncol = 3))
 x <- c("visType", "accuracy", "education")
@@ -544,9 +555,10 @@ splitAccuracy3DF[nrow(splitAccuracy3DF) + 1,] <- list("text",
                                                                      correctOrNotDF$education=='PhD')) / length(which(correctOrNotDF$visType=='text' &
                                                                                                                         correctOrNotDF$education=='PhD')),
                                                       "PhD")
-
+png('splitAccuracy-edu.png', units="in", width=5, height=4, res=300)
 ggplot(data = splitAccuracy3DF, 
        aes(x = visType, y = accuracy, fill = education)) + 
-  geom_bar(stat = 'identity', width = 0.3, position = position_dodge(), color = 'darkblue') +
+  geom_bar(stat = 'identity', width = 0.5, position = position_dodge(), color = 'darkblue') +
   scale_y_continuous(labels = scales::percent_format()) +
   labs(title = "Both guesses correct accuracy (by Education)")
+dev.off()
