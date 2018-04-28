@@ -6,23 +6,35 @@ library('jsonlite')
 current_path <- getActiveDocumentContext()$path
 setwd(dirname(current_path))
 print(getwd())
+
 # importing data
-raw_data <- fromJSON("data-sofar.json")
-raw2 <- fromJSON("turkData.json")
-raw3 <- fromJSON("uniqueTurk.json")
+raw_data <- data.frame(fromJSON("data-sofar.json", flatten = TRUE), check.rows = FALSE)
+raw3 <- data.frame(fromJSON("uniqueTurk.json", flatten = TRUE), check.rows = FALSE)
+raw_data$postId = NA #the data-sofar did not have the postId at the time
+allRaw <- rbind(raw3, raw_data)
+# fixedAllRaw is the RAW DF
+fixedAllRaw <- allRaw
+fixedAllRaw$visType <- as.factor(fixedAllRaw$visType)
+fixedAllRaw$gender <- as.factor(fixedAllRaw$gender)
+fixedAllRaw$experience <- as.factor(fixedAllRaw$experience)
+fixedAllRaw$education <- as.factor(fixedAllRaw$education)
+nrow(fixedAllRaw)
+summary(fixedAllRaw)
+
 # check for NA entries
 colnames(raw_data)[colSums(is.na(raw_data)) > 0]
 colnames(raw2)[colSums(is.na(raw2)) > 0]
 colnames(raw3)[colSums(is.na(raw3)) > 0]
 # duplicates were removed in raw3
 resultsDF <- raw3
+resultsDF <- fixedAllRaw
 # calculating Log-base-2 error values
 attach(resultsDF)
 resultsDF$logErrorGuessA = log(abs(guessA - 
-                                      (ceiling(questionN * data$has_condition * data$positive_condition) +
-                                      ceiling((questionN - questionN * data$has_condition) * data$positive_no_condition))) + 1/8,2)
+                                      (ceiling(questionN * data.has_condition * data.positive_condition) +
+                                      ceiling((questionN - questionN * data.has_condition) * data.positive_no_condition))) + 1/8,2)
 resultsDF$logErrorGuessB = log(abs(guessB - 
-                                      (ceiling(questionN * data$has_condition * data$positive_condition))) + 1/8,2)
+                                      (ceiling(questionN * data.has_condition * data.positive_condition))) + 1/8,2)
 # setting -3 value to 0 (these values mean the guess was CORRECT)
 resultsDF$logErrorGuessA[resultsDF$logErrorGuessA == -3] = 0
 resultsDF$logErrorGuessB[resultsDF$logErrorGuessB == -3] = 0
@@ -31,20 +43,20 @@ chisq.test(resultsDF$visType, resultsDF$logErrorGuessA, correct = FALSE)
 chisq.test(resultsDF$visType, resultsDF$logErrorGuessB, correct = FALSE)
 # logError plots
 ggplot(resultsDF, aes(x = visType, y = logErrorGuessA)) +
-  geom_jitter(width = 0.1, alpha = 0.3) +
-  stat_summary(fun.data = "mean_cl_boot", color = "red", size = 1.2, shape = 18, geom = "pointrange") +
+  geom_jitter(width = 0.1, alpha = 0.3, size = 3) +
+  stat_summary(fun.data = "mean_cl_boot", color = "red", size = 2, shape = 18, geom = "pointrange") +
   labs(title = "Guess A log-2 error plot")
 ggplot(resultsDF, aes(x = visType, y = logErrorGuessB)) +
-  geom_jitter(width = 0.1, alpha = 0.3) +
-  stat_summary(fun.data = "mean_cl_boot", color = "red", size = 1.2, shape = 18, geom = "pointrange") +
+  geom_jitter(width = 0.1, alpha = 0.3, size = 3) +
+  stat_summary(fun.data = "mean_cl_boot", color = "red", size = 2, shape = 18, geom = "pointrange") +
   labs(title = "Guess B log-2 error plot")
 # determine if participants were CORRECT or NOT in their guesses
 resultsDF$guessACorrect = as.factor(
-  guessA == ceiling(questionN * data$has_condition * data$positive_condition) +
-            ceiling((questionN - questionN * data$has_condition) * data$positive_no_condition)
+  guessA == ceiling(questionN * data.has_condition * data.positive_condition) +
+            ceiling((questionN - questionN * data.has_condition) * data.positive_no_condition)
 )
 resultsDF$guessBCorrect = as.factor(
-  guessB == ceiling(questionN * data$has_condition * data$positive_condition)
+  guessB == ceiling(questionN * data.has_condition * data.positive_condition)
 )
 # indepedent two-sample t-test
 TwoGroup.ST <- resultsDF[resultsDF$visType != "interactive",]
@@ -63,13 +75,10 @@ guessACorrectDF <- resultsDF[resultsDF$guessACorrect==TRUE,]
 guessBCorrectDF <- resultsDF[resultsDF$guessBCorrect==TRUE,]
 
 #######################################################################################
-# the following below was from a draft script, but it looked at all 83 respondents
+# the following below is for ALL 104 participants
 
 # demographic data statistics
 demoDF <- resultsDF[c("age","gender","experience","education")]
-demoDF$gender <- as.factor(demoDF$gender)
-demoDF$experience <- as.factor(demoDF$experience)
-demoDF$education <- as.factor(demoDF$education)
 summary(demoDF)
 # more specific demographics
 skilledDemo <- demoDF[demoDF$experience == "High",]
