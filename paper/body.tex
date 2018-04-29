@@ -64,11 +64,7 @@ conclusions:
 
 
 
-\testfigure
-
-\testtable
-
-\demographicstable
+\guessAError
 
 \section{Background}
 Over the past three decades, research focused on understanding the cause of inaccuracy for both low and high numeracy individuals'
@@ -134,7 +130,7 @@ probability only text.
 
 
 
-\section{Method}
+\section{Methodology}
 The methodology used for this research builds upon the methodology used by
 Ottley et al.\cite{Ottley2016}. The test completed as part of this work 
 linguistic comparison of text containing probabilities versus frequencies.
@@ -173,11 +169,17 @@ As previously mentioned, the baseline case was designed to match the language us
 This description is a combination of the main components of a good text representation, those being framing, narrative, and probing.
 
 \subsection{Design 2: Vis-Only}
-For the vis-only test case, pictorial representation (human-like figures) were used to show the frequency count of tested/conditioned members of the population. Figures were shown along a horizontal axis, grouped along the vertical axis by the specific attribute: ‘positive test and has condition’, ‘positive test and no condition’, ‘negative test and has condition’, and ‘negative test and no condition.’ An example arrangement can be seen in Figure X. 
 
-TODO figures
+\staticVis
+
+For the vis-only test case, pictorial representation (human-like figures) were used to show the frequency count of tested/conditioned members of the population. Figures were shown along a horizontal axis, grouped along the vertical axis by the specific attribute: ‘positive test and has condition’, ‘positive test and no condition’, ‘negative test and has condition’, and ‘negative test and no condition.’ An example arrangement can be seen in \ref{fig:static}. 
 
 \subsection{Design 3: Interactive-Vis}
+
+\interactiveVis
+
+\interactiveVisToggle
+
 We implemented interactivity using the same pictorial representation as the
 vis-only representation. The interactive vis tool includes selectable buttons
 on the left-hand-side of the chart. Participants can use the selectable
@@ -187,31 +189,39 @@ show the people icons associated with ‘positive test and has condition’ and
 ‘negative test and has condition.’ Transitions and animation were included
 for inverse selection. For example, if a user toggled of the ‘No Condition’
 button, icons were removed from the screen. The figures below show a static
-view of interactive states. Figure X shows the starting screen for the
-interactive visualization tool. Figure Y is an example of toggling the button
+view of interactive states. Figure \ref{fig:interactive} shows the starting screen for the
+interactive visualization tool. Figure \ref{fig:interactive-toggle} is an example of toggling the button
 to specify the selection to answer the second lab question.
 
 
 \section{Results}
 
-TODO fix figures
+\demographicstable
+
+\accuracyPlot
+
+\educationAccuracy
+
+\experienceAccuracy
+
+\guessAError
 
 A total number of 104 individuals participated in the experiment. The
 distribution of participants by group are 30, 38 and 36 completes for
 text-only, vis-only and interactive responses respectively. Demographic
 information was collected as part of the experiment. A summary of demographic
-information of our experiment participants can be found in Table X.
+information of our experiment participants can be found in Table \ref{tab:demographics}.
 
 For the purposes of this analysis, responses were characterized using a
 binary approach of either correct or incorrect. So for our overall
 experiment, only 50 of the 104 participants were correct (48\% accuracy). The
 overall accuracy across each visualization type was also observed.The
 logarithmic (base 2) error score was calculated for both of the two
-experiment questions, as seen in Figure X.
+experiment questions, as seen in Figure \ref{fig:accuracyPlot}.
 
 We also observed how the results looked when separated by the educational
 background and statistical understanding for each of the participants. The
-results of which can be found in Figure X and Figure X.
+results of which can be found in Figure \ref{fig:educationAccuracy} and Figure \ref{fig:experienceAccuracy} respectively.
 
 A chi-squared test was conducted across all participants and discovered a
 not-so-significant value when trying to see if there were significant
