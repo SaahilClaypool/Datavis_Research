@@ -11,6 +11,7 @@ class App extends Component {
 
   screen = 0;
   row = {}; 
+  postId = (+new Date()).toString(36)
 
   constructor(props) {
     super(props); 
@@ -120,8 +121,7 @@ class App extends Component {
                   </select>
               </label>
               <br/>
-              <h4>Note: Hitting Send will open your Email application. 
-                Please hit send without modifying the message body</h4>
+              <h4>Note: Hitting Send will send your results to the proctor</h4>
               <input type="submit" value="Send Data to Proctor" />
           </form>
       </div>
@@ -131,8 +131,9 @@ class App extends Component {
   if(this.state.row) {
     basic_result = (
       <div>
-          <p>If you email client does not open, please copy the below data and send it to "smclaypool@wpi.edu".</p>
-          <p>{this.state.row}</p>
+          <p>Thank you!</p>
+          <p>Use the survey code to verify the completion of your task</p>
+          <p>code: {this.postId}</p>
       </div>
       ); 
   }
@@ -157,13 +158,19 @@ class App extends Component {
     let expVal = experience.value; 
     let education = document.getElementById("education");
     let edValue = education.value; 
-    this.row = {...this.row, age: ageVal, gender: genderVal, experience: expVal, education: edValue};
-    window.location.href = "mailto:smclaypool@wpi.edu?subject=Experiment%20Results&body=" + JSON.stringify(this.row);
+    console.log("Post id: " + this.postId)
+    this.row = {...this.row, age: ageVal, gender: genderVal, experience: expVal, education: edValue, postId: this.postId};
+    // window.location.href = "mailto:smclaypool@wpi.edu?subject=Experiment%20Results&body=" + JSON.stringify(this.row);
     this.setState({
       ...this.state, 
         row: JSON.stringify(this.row)
     });
     console.log(this.row)
+    fetch('/data', {
+    method: 'post',
+    mode: 'no-cors',
+    body: JSON.stringify(this.row)});
+
 }
 
   render() {
