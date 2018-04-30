@@ -13,10 +13,10 @@ misinterpret statistical results. Consider the following standardized
 statement about mammography screening results \cite{Ottley2016}:
 
 \begin{displayquote}
-    The probability of breast cancer is 1% for women at age forty who participate
-    in routine screening. If a woman has breast cancer, the probability is 80%
+    The probability of breast cancer is 1\% for women at age forty who participate
+    in routine screening. If a woman has breast cancer, the probability is 80\%
     that she will get a positive mammography. If a woman does not have breast
-    cancer, the probability is 9.6% that she will also get a positive
+    cancer, the probability is 9.6\% that she will also get a positive
     mammography. A woman in this age group had a positive mammography in a
     routine screening. What is the probability that she actually has breast
     cancer? 
@@ -44,21 +44,18 @@ Similar to previous work, the aim of our research is to further explore
 techniques for improving the presentation of Bayesian information to improve
 reasoning. We postulate that, as suggested by previous work, an interactive
 design will help problem solvers reason about conditional probabilities by
-providing a 'guide' for reasoning about the problem \cite{Tsai2011}. Specifically, we
-
-propose that an interactive frequency chart, where users can select or view
+providing a 'guide' for reasoning about the problem \cite{Tsai2011}. Specifically, we propose that an interactive frequency chart, where users can select or view
 different conditions will reduce the information presented to a user and thus
 help them complete a provided Bayesian reasoning problem.
 
-To test this hypothesis, we conducted an experiment asking mechanical turk
-participants to answer a Bayesian inference problem, similar to the one
+To test this hypothesis, we conducted an experiment asking lab participants to answer a Bayesian inference problem, similar to the one
 stated above. We tested three different presentations of the conditional
 probabilities: plain text, a static visualization, and an interactive
 visualization. From this experiment, we were able to draw the following
 conclusions:
 
 \begin{itemize}
-    \item As prior research indicates, people perform poorly on this seemingly simple Bayesian reasoning task. This is even true for users that claim a ‘high’ statistical familiarity.
+    \item As prior research indicates, people perform poorly on this seemingly simple Bayesian reasoning task. This is even true for users that claim a ?high? statistical familiarity.
     \item Interaction did not seem to have a positive effective on reasoning. In fact, there is some indication it caused users to perform worse on their reasoning task. We hypothesize this could be because it made the information more confusing or distracted the user. 
 \end{itemize}
 
@@ -97,7 +94,7 @@ previously completed work by Cole \cite{Cole1989}; participants were found to
 perform better when they were provided with frequency formats over
 probabilities. While Cole did not explicitly test frequencies against
 probabilities hypothesis, numerical frequencies were presented visually for 3
-out of the 4 diagrams used in Cole’s study. Participants showed improvements
+out of the 4 diagrams used in Cole?s study. Participants showed improvements
 with training with the use of visuals(frequencies) but found no improvement
 with the use of standard probabilities. This improvement provided by frequency formats has been observed and confirmed in other studies in areas such as public health, psychology, and data visualization \cite{Eddy1982, Galesic2009, Cohen2007, Brown2014, Brase2009}. 
 
@@ -108,7 +105,7 @@ Ottley et al. \cite{Ottley2016}, the researchers parse through discrepancies
 of past research by testing finely defined hypotheses pertaining to both
 linguistic and visual representation of the information. For a detailed
 discussion of discrepancies in past work please reference Ottley et al \cite{Ottley2016}.
-Ottley’s findings supported the assertion that using frequencies as opposed to
+Ottley?s findings supported the assertion that using frequencies as opposed to
 probabilities improved accuracy. However, participant accuracy rates using
 text only or visualization only outperformed those using text plus
 visualization.
@@ -142,7 +139,7 @@ through the use of interaction.
 
 We recruited 80 participants using Amazon's Mechanical Turk (MTurk) service and supplemented these participants with our colleagues. Participants were directed to our survey via an external link and results were recorded on a server set up for this experiment. Each participant was given a unique verification code upon the completion of their task. 
 
-Tree test cases were used in this study: text-only, vis-only, and interactive vis. The background text for all cases is as follows:
+Three test cases were used in this study: text-only, vis-only, and interactive vis. The background text for all cases is as follows:
 
 \begin{displayquote}
     There is a newly discovered disease, Disease X, which is transmitted by a bacterial infection found in the population. There is a test to detect whether or not a person has the disease, but it is not perfect. Here is some information about the current research on Disease X and efforts to test for the infection that causes it.
@@ -150,7 +147,7 @@ Tree test cases were used in this study: text-only, vis-only, and interactive vi
 
 The user is then presented with one of the three test cases as described in greater detail below. Users were selected at random as to which test case they were assigned. The numerical specifics that a user was presented with were randomly selected from a set of pre-selected test cases. All participants are then asked to answer the following questions:
 
-‘100 people are tested for Disease X’:
+?100 people are tested for Disease X?:
 \begin{enumerate}
     \item How many people do you think will test positive?
     \item Out of those people, how many will have the disease? 
@@ -169,7 +166,7 @@ This description is a combination of the main components of a good text represen
 
 \staticVis
 
-For the vis-only test case, pictorial representation (human-like figures) were used to show the frequency count of tested/conditioned members of the population. Figures were shown along a horizontal axis, grouped along the vertical axis by the specific attribute: ‘positive test and has condition’, ‘positive test and no condition’, ‘negative test and has condition’, and ‘negative test and no condition.’ An example arrangement can be seen in \ref{fig:static}. 
+For the vis-only test case, pictorial representation (human-like figures) were used to show the frequency count of tested/conditioned members of the population. Figures were shown along a horizontal axis, grouped along the vertical axis by the specific attribute: ?positive test and has condition?, ?positive test and no condition?, ?negative test and has condition?, and ?negative test and no condition.? An example arrangement can be seen in Fig \ref{fig:static}. 
 
 \subsection{Design 3: Interactive-Vis}
 
@@ -181,11 +178,11 @@ We implemented interactivity using the same pictorial representation as the
 vis-only representation. The interactive vis tool includes selectable buttons
 on the left-hand-side of the chart. Participants can use the selectable
 buttons to toggle through different scenarios. For example if a user toggles
-on the ‘Has Condition’ button, the pictorial representation changes to only
-show the people icons associated with ‘positive test and has condition’ and
-‘negative test and has condition.’ Transitions and animation were included
-for inverse selection. For example, if a user toggled of the ‘No Condition’
-button, icons were removed from the screen. The figures below show a static
+on the ?Has Condition? button, the pictorial representation changes to only
+show the people icons associated with ?positive test and has condition? and
+?negative test and has condition.? Transitions and animation were included
+for inverse selection. For example, if a user toggled of the ?No Condition?
+button, icons were removed from the screen. The figures above show a static
 view of interactive states. Figure \ref{fig:interactive} shows the starting screen for the
 interactive visualization tool. Figure \ref{fig:interactive-toggle} is an example of toggling the button
 to specify the selection to answer the second lab question.
@@ -203,6 +200,8 @@ to specify the selection to answer the second lab question.
 
 \guessAError
 
+\guessBError
+
 A total number of 104 individuals participated in the experiment. The
 distribution of participants by group are 30, 38 and 36 completes for
 text-only, vis-only and interactive responses respectively. Demographic
@@ -214,7 +213,7 @@ binary approach of either correct or incorrect. So for our overall
 experiment, only 50 of the 104 participants were correct (48\% accuracy). The
 overall accuracy across each visualization type was also observed.The
 logarithmic (base 2) error score was calculated for both of the two
-experiment questions, as seen in Figure \ref{fig:accuracyPlot}.
+experiment questions, as seen in Figure \ref{fig:guessAErr} and Figure \ref{fig:guessBError}.
 
 We also observed how the results looked when separated by the educational
 background and statistical understanding for each of the participants. The
@@ -270,7 +269,7 @@ As statistics become increasingly pervasive as a tool in decision making for
 people of all numeracy skill levels, the need for effectively expressing this
 information grows. The focus of this research was to determine whether the
 inclusion of interaction could be used to improve interpretation accuracy
-rates. The experiment did not produced statistically significant difference
+rates. The experiment did not produce statistically significant differences
 between text-only, vis-only and interactive-vis test cases. However, our
 findings aligned with past studies and can serve as a foundation for future
 work on the effects of interaction and statistical reasoning.

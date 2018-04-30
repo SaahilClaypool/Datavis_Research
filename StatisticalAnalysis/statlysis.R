@@ -325,13 +325,14 @@ splitEduAccuracyDF[nrow(splitEduAccuracyDF) + 1,] <- list("text",
                                                                      resultsDF$education=='PhD')) / length(which(resultsDF$visType=='text' &
                                                                                                                         resultsDF$education=='PhD')),
                                                       "PhD")
-
+png('splitAccuracy-edu.png', units="in", width=5, height=4, res=300)
 ggplot(data = splitEduAccuracyDF, 
        aes(x = visType, y = accuracy, fill = education)) + 
   geom_bar(stat = 'identity', width = 0.4, position = position_dodge(), color = 'darkblue') +
   scale_y_continuous(labels = scales::percent_format()) +
-  labs(title = "Both guesses correct accuracy (by Education)")
-
+  labs(title = "Both guesses correct accuracy (by Education)") +
+  theme_bw()
+dev.off()
 
 #######################################################################################
 # the following is for the subset of respondents who got both guesses correctly
@@ -560,5 +561,5 @@ ggplot(data = splitAccuracy3DF,
        aes(x = visType, y = accuracy, fill = education)) + 
   geom_bar(stat = 'identity', width = 0.5, position = position_dodge(), color = 'darkblue') +
   scale_y_continuous(labels = scales::percent_format()) +
-  labs(title = "Both guesses correct accuracy (by Education)")
-dev.off()
+  labs(title = "Both guesses correct accuracy (by Education)") +
+  theme_bw()
